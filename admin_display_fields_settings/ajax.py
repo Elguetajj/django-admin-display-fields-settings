@@ -15,7 +15,7 @@ def changeFormHandler(request):
     if not request.is_ajax() or request.method != "POST":
         return HttpResponseNotFound('<h1>Page not found</h1>')
 
-    view = getAdminViewByUrl(request.META.get('HTTP_REFERER'))
+    view = getAdminViewByUrl(request.headers.get('Referer'))
     if view is False or view is None:
         return JsonResponse({}, errors=['Not found this view'], success=False)
 
