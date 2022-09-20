@@ -12,7 +12,7 @@ def changeFormHandler(request):
     if not request.user.is_authenticated:
         return HttpResponseForbidden()
 
-    if not request.is_ajax() or request.method != "POST":
+    if not is_ajax(request) or request.method != "POST":
         return HttpResponseNotFound('<h1>Page not found</h1>')
 
     view = getAdminViewByUrl(request.headers.get('Referer'))
@@ -53,3 +53,7 @@ def changeFormHandler(request):
             return JsonResponse({}, errors=[], success=True)
 
     return JsonResponse({}, errors=[], success=False)
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
