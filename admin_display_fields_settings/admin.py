@@ -42,7 +42,9 @@ class DisplayFieldsSettingsAdmin(admin.ModelAdmin):
 
             try:
                 name = self.opts.get_field(field).verbose_name
+            
             except FieldDoesNotExist:
+                print(field)
 
                 if hasattr(self.model, field):
                     if field == '__str__' or field == '__unicode__':
