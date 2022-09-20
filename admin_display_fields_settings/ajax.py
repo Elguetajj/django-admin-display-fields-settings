@@ -9,7 +9,7 @@ import json
 
 def changeFormHandler(request):
 
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponseForbidden()
 
     if not request.is_ajax() or request.method != "POST":
