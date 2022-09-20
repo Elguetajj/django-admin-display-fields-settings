@@ -42,14 +42,17 @@ class DisplayFieldsSettingsAdmin(admin.ModelAdmin):
 
             try:
                 name = self.opts.get_field(field).verbose_name
+
             
             except FieldDoesNotExist:
 
                 if isinstance(field, types.FunctionType):
                     if hasattr(field, 'short_description'):
                         name = getattr(field, 'short_description')
+                        field = field.__name__
                     else:
                         field = field.__name__
+                        name = field.__name__
                 
                 elif hasattr(self.model, field):
                     if field == '__str__' or field == '__unicode__':
@@ -84,6 +87,7 @@ class DisplayFieldsSettingsAdmin(admin.ModelAdmin):
 
         fields_names = self.get_fields_names()
 
+
         if len(list_display_sort) > 0 \
                 and isinstance(list_display_sort, list):
             keyOrder = list_display_sort + \
@@ -112,7 +116,7 @@ class DisplayFieldsSettingsAdmin(admin.ModelAdmin):
         form = DisplayFieldsSettings(fields, initial=initial, data=data)
 
         keyOrder += ['sort_opts']
-        form.fields.keyOrder = [field for field in keyOrder if field in fields]
+        form.field_order = [field for field in keyOrder if field in fields]
 
         return form
 
