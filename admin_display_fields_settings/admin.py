@@ -44,21 +44,20 @@ class DisplayFieldsSettingsAdmin(admin.ModelAdmin):
                 name = self.opts.get_field(field).verbose_name
             
             except FieldDoesNotExist:
-                print(field)
 
-                if hasattr(self.model, field):
+                if isinstance(field, types.FunctionType):
+                    if hasattr(field, 'short_description'):
+                        name = getattr(field, 'short_description')
+                    else:
+                        field = field.__name__
+                
+                elif hasattr(self.model, field):
                     if field == '__str__' or field == '__unicode__':
                         name = self.model.__name__
                     else:
                         mth = getattr(self.model, field)
                         if hasattr(mth, 'short_description'):
                             name = getattr(mth, 'short_description')
-
-                elif isinstance(field, types.FunctionType):
-                    if hasattr(field, 'short_description'):
-                        name = getattr(field, 'short_description')
-                    else:
-                        field = field.__name__
 
             if name is None:
                 name = field.replace('_', ' ')
